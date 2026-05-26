@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+/* Tailwind v4 resets max-width on all <img> elements, which breaks
+   Leaflet's 256×256 map tiles. This restores their natural dimensions. */
+.leaflet-tile-container img,
+.leaflet-tile {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* Reset Vite template root styles */
+#root {
+  width: 100%;
+  min-height: 100svh;
+  text-align: left;
+  border: none;
+  max-width: none;
+}
+
+body {
+  margin: 0;
+}

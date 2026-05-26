@@ -1,0 +1,43 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const authRoutes = require('./routes/auth');
+const reportRoutes = require('./routes/report');
+const adminRoutes = require('./routes/admin');
+const techRoutes = require('./routes/tech');
+const categoryRoutes = require('./routes/category');
+const fileRoutes = require('./routes/file');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use('/api/auth', authRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/tech', techRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/files', fileRoutes);
+
+// Serve the built frontend (dist/) if it exists next to this file.
+// All non-API requests fall through to index.html so React Router works.
+const distPath = path.join(__dirname, 'dist');
+if (require('fs').existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.get(/(.*)/, (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
+
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err.message);
+  res.status(500).json({ success: false, message: 'Internal server error.' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
