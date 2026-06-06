@@ -31,13 +31,13 @@ async function updateStatus(req, res) {
   try {
     const paramsParsed = idParamSchema.safeParse(req.params);
     if (!paramsParsed.success) {
-      const errors = paramsParsed.error.errors.map((e) => ({ path: e.path.join('.'), message: e.message }));
+      const errors = paramsParsed.error.issues.map((e) => ({ path: e.path.join('.'), message: e.message }));
       return res.status(400).json({ success: false, message: 'Validation failed', errors });
     }
 
     const bodyParsed = updateStatusSchema.safeParse(req.body);
     if (!bodyParsed.success) {
-      const errors = bodyParsed.error.errors.map((e) => ({ path: e.path.join('.'), message: e.message }));
+      const errors = bodyParsed.error.issues.map((e) => ({ path: e.path.join('.'), message: e.message }));
       return res.status(400).json({ success: false, message: 'Validation failed', errors });
     }
 

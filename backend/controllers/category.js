@@ -23,7 +23,7 @@ async function createCategory(req, res) {
   try {
     const parsed = categorySchema.safeParse(req.body);
     if (!parsed.success) {
-      const errors = parsed.error.errors.map((e) => ({ path: e.path.join('.'), message: e.message }));
+      const errors = parsed.error.issues.map((e) => ({ path: e.path.join('.'), message: e.message }));
       return res.status(400).json({ success: false, message: 'Validation failed', errors });
     }
 
@@ -41,7 +41,7 @@ async function deleteCategory(req, res) {
   try {
     const parsed = idParamSchema.safeParse(req.params);
     if (!parsed.success) {
-      const errors = parsed.error.errors.map((e) => ({ path: e.path.join('.'), message: e.message }));
+      const errors = parsed.error.issues.map((e) => ({ path: e.path.join('.'), message: e.message }));
       return res.status(400).json({ success: false, message: 'Validation failed', errors });
     }
 
