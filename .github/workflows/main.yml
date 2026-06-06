@@ -23,6 +23,11 @@ jobs:
       run: npm install
       working-directory: ./backend
 
+    
+    - name: Code Quality & Linting
+      run: npm run lint --if-present
+      working-directory: ./backend
+
     - name: Run Automated Tests
       run: npm test
       working-directory: ./backend
