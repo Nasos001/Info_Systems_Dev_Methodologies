@@ -45,5 +45,5 @@ if (!process.env.VERCEL) {
   });
 }
 
-// CRITICAL FOR VERCEL: Export the app
+// For Vercel
 module.exports = app;
