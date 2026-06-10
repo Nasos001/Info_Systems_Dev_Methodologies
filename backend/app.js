@@ -24,11 +24,11 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/files', fileRoutes);
 
 // Serve the built frontend (dist/) if it exists next to this file.
-// All non-API requests fall through to index.html so React Router works.
 const distPath = path.join(__dirname, 'dist');
 if (require('fs').existsSync(distPath)) {
   app.use(express.static(distPath));
-  app.get(/(.*)/, (req, res) => {
+  // Change regex to a catch-all string '*' so Vercel & React Router handle fallback correctly
+  app.get('*', (req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });
 }
@@ -38,6 +38,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, message: 'Internal server error.' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// ONLY run app.listen if we are NOT on Vercel (Local / Docker environment)
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+// CRITICAL FOR VERCEL: Export the app
+module.exports = app;
